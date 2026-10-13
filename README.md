@@ -19,8 +19,8 @@ Klipper driver (Anycubic ACE / ACE Pro multi-material units).
     exist in the printer config, so the path adapts to your hardware.
 - **Jam indicator** — the encoder ring turns red when filament is at the nozzle
   but not at the encoder (jam or break between them).
-- **Feed assist toggle** — one-click `ACE_ENABLE_CURRENT_FEED_ASSIST` /
-  `ACE_DISABLE_CURRENT_FEED_ASSIST`.
+- **Feed assist toggle** — one-click `ACE_ENABLE_FEED_ASSIST T=` /
+  `ACE_DISABLE_FEED_ASSIST T=` (native driver commands).
 - **Dryer dialog** — chamber temperature, DRYING/IDLE state with remaining time,
   temperature slider (50–65 °C, step 5) and duration slider (30–240 min, step 30).
 - Service actions: load all slots, full unload, reconnect, request status.
@@ -29,8 +29,6 @@ Klipper driver (Anycubic ACE / ACE Pro multi-material units).
 
 - Klipper + Moonraker with the `acepro-any-klipper` driver installed and working
   (`printer.ace` / `printer.ace_instance_<n>` objects visible in the API).
-- The ACE macros `ACE_ENABLE_CURRENT_FEED_ASSIST` / `ACE_DISABLE_CURRENT_FEED_ASSIST`
-  in your config (shipped with the driver's example configs).
 - Node.js >= 18 and ~2 GB free disk space for the build.
 
 ## Installation
@@ -71,7 +69,7 @@ Klipper config:
 | Node     | Matches object names containing      | Typical config section |
 |----------|--------------------------------------|------------------------|
 | SPLITTER | `runout_rdm`                         | `filament_switch_sensor filament_runout_rdm` |
-| Encoder  | `ace_encoder`                        | `filament_motion_sensor ace_encoder` |
+| Encoder  | `ace_encoder` or `tracker`           | `filament_motion_sensor ace_encoder` |
 | Nozzle   | `runout_nozzle`                      | `filament_switch_sensor filament_runout_nozzle` |
 
 If a sensor is missing, its node (and the line leading to it) is simply not
