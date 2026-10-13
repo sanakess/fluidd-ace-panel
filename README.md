@@ -31,6 +31,22 @@ Klipper driver (Anycubic ACE / ACE Pro multi-material units).
   (`printer.ace` / `printer.ace_instance_<n>` objects visible in the API).
 - Node.js >= 18 and ~2 GB free disk space for the build.
 
+## Prebuilt build (no compilation needed)
+
+If you don't want to install Node.js and build from source, grab the prebuilt
+archive from the
+[latest release](https://github.com/sanakess/fluidd-ace-panel/releases/latest)
+and unpack it over your Fluidd webroot:
+
+```bash
+curl -L -o fluidd-ace.tar.gz https://github.com/sanakess/fluidd-ace-panel/releases/download/v1.0/fluidd-ace-v1.0.tar.gz
+sudo rm -rf /usr/share/fluidd/*        # adjust to your webroot
+sudo tar xzf fluidd-ace.tar.gz -C /usr/share/fluidd
+```
+
+Hard-reload the browser (Ctrl+Shift+R) afterwards. To build from source
+instead (e.g. to track a newer Fluidd version), follow the steps below.
+
 ## Installation
 
 ```bash
