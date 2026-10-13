@@ -1,7 +1,7 @@
 # ACE Pro Panel for Fluidd
 
 An ACE Pro dashboard card for [Fluidd](https://github.com/fluidd-core/fluidd), designed
-for the [acepro-any-klipper](https://github.com/liuyanliang-2020/acepro-any-klipper)
+for the [acepro-any-klipper](https://github.com/ducati1198/acepro-any-klipper)
 Klipper driver (Anycubic ACE / ACE Pro multi-material units).
 
 ![Panel screenshot](docs/panel.png)
