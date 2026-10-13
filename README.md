@@ -118,6 +118,10 @@ mv /usr/share/fluidd.bak-ace-<timestamp> /usr/share/fluidd
   differs from upstream; update the anchors in `apply_fluidd_ace.py` manually.
 - **Card not visible at all** — confirm the driver objects exist, e.g.
   `curl localhost:7125/printer/objects/list | grep ace`.
+- **Using OctoEverywhere?** It injects its own files (`/oe` + a script tag)
+  into the Fluidd webroot. Updating Fluidd removes them; the OctoEverywhere
+  service re-injects them automatically within a minute or two. If remote
+  access stays broken, re-run the OctoEverywhere installer.
 
 ## License
 
