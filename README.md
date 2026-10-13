@@ -50,7 +50,7 @@ instead (e.g. to track a newer Fluidd version), follow the steps below.
 ## Installation
 
 ```bash
-git clone https://github.com/<your-repo>/fluidd-ace-panel.git
+git clone https://github.com/sanakess/fluidd-ace-panel.git
 cd fluidd-ace-panel
 bash install.sh
 ```
