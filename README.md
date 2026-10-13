@@ -29,7 +29,8 @@ Klipper driver (Anycubic ACE / ACE Pro multi-material units).
 
 - Klipper + Moonraker with the `acepro-any-klipper` driver installed and working
   (`printer.ace` / `printer.ace_instance_<n>` objects visible in the API).
-- Node.js >= 18 and ~2 GB free disk space for the build.
+- ~3.5 GB free disk space for the build. Node.js >= 18 is installed
+  automatically if missing.
 
 ## Prebuilt build (no compilation needed)
 
@@ -49,18 +50,34 @@ instead (e.g. to track a newer Fluidd version), follow the steps below.
 
 ## Installation
 
+Run **on the Klipper host** (SSH into your Pi, e.g. `ssh pi@<printer-ip>`):
+
 ```bash
 git clone https://github.com/sanakess/fluidd-ace-panel.git
 cd fluidd-ace-panel
 bash install.sh
 ```
 
-The script checks Node, clones a fresh Fluidd, copies the panel, patches Fluidd,
-builds it and deploys to the detected webroot (`/usr/share/fluidd`,
-`/var/www/fluidd`, `/opt/fluidd`), backing up the previous version as
-`webroot.bak-ace-<timestamp>`.
+or as a one-liner — the script fetches the panel sources by itself:
 
-Useful options:
+```bash
+curl -fsSL https://raw.githubusercontent.com/sanakess/fluidd-ace-panel/main/install.sh | bash
+```
+
+The script is self-sufficient. It:
+
+1. checks that Moonraker is up and the `acepro-any-klipper` driver is visible
+   in the API (`FORCE=1` to skip),
+2. installs Node.js 22 LTS and pnpm if they are missing,
+3. adds a temporary swap file on low-memory hosts (always removed afterwards),
+4. clones a fresh Fluidd, copies the panel, patches Fluidd and builds it,
+5. backs up the current webroot, deploys, verifies the deployed bundle and
+   rolls back on failure.
+
+Webroots are auto-detected (`/usr/share/fluidd`, `/var/www/fluidd`, `/opt/fluidd`,
+`/home/pi/fluidd`); the previous version is kept as `webroot.bak-ace-<timestamp>`.
+
+Options (environment variables):
 
 ```bash
 # custom webroot
@@ -68,7 +85,19 @@ WEBROOT=/home/pi/fluidd bash install.sh
 
 # keep the built repository for debugging
 KEEP_REPO=1 bash install.sh
+
+# skip the ACE driver preflight check
+FORCE=1 bash install.sh
+
+# never create a temporary swap file
+NO_SWAP=1 bash install.sh
+
+# Moonraker on a non-default URL
+MOONRAKER_URL=http://192.168.1.10:7125 bash install.sh
 ```
+
+The build needs ~3.5 GB of free disk (never in `/tmp` — it is often a small
+tmpfs) and passwordless `sudo` for installing Node.js and the temporary swap.
 
 After the install, reload Fluidd with **Ctrl+Shift+R**. If the card does not
 appear, clear the service worker (DevTools -> Application -> Storage ->
