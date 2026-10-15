@@ -52,9 +52,9 @@ archive from the
 and unpack it over your Fluidd webroot:
 
 ```bash
-curl -L -o fluidd-ace-v1.1.tar.gz https://github.com/sanakess/fluidd-ace-panel/releases/download/v1.1/fluidd-ace-v1.1.tar.gz
+curl -L -o fluidd-ace-v1.2.tar.gz https://github.com/sanakess/fluidd-ace-panel/releases/download/v1.2/fluidd-ace-v1.2.tar.gz
 sudo rm -rf /usr/share/fluidd/*        # adjust to your webroot
-sudo tar xzf fluidd-ace-v1.1.tar.gz -C /usr/share/fluidd
+sudo tar xzf fluidd-ace-v1.2.tar.gz -C /usr/share/fluidd
 ```
 
 Hard-reload the browser (Ctrl+Shift+R) afterwards. To build from source
