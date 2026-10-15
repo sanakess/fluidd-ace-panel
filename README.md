@@ -6,7 +6,6 @@ Klipper driver (Anycubic ACE / ACE Pro multi-material units).
 
 ![Panel screenshot](docs/panel.png)
 
-![Filament loading](docs/panel-loading.png)
 
 ## Features
 
