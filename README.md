@@ -40,7 +40,7 @@ archive from the
 and unpack it over your Fluidd webroot:
 
 ```bash
-curl -L -o fluidd-ace.tar.gz https://github.com/sanakess/fluidd-ace-panel/releases/download/v1.0/fluidd-ace-v1.0.tar.gz
+curl -L -o fluidd-ace-v1.1.tar.gz https://github.com/sanakess/fluidd-ace-panel/releases/download/v1.1/fluidd-ace-v1.1.tar.gz
 sudo rm -rf /usr/share/fluidd/*        # adjust to your webroot
 sudo tar xzf fluidd-ace.tar.gz -C /usr/share/fluidd
 ```
