@@ -6,23 +6,35 @@ Klipper driver (Anycubic ACE / ACE Pro multi-material units).
 
 ![Panel screenshot](docs/panel.png)
 
+![Filament loading](docs/panel-loading.png)
+
 ## Features
 
-- **Slot grid** — one spool per slot, colored from the driver data. Click a spool to
-  load it (`T<n>`); click the pencil to edit material type and color
-  (persisted via `ACE_SET_SLOT`).
+- **Slot tiles** — each slot is a rounded tile with the spool, material and
+  RFID info. Click the spool to load it (`T<n>`); click the pencil to edit
+  material type and color (persisted via `ACE_SET_SLOT`). Dark filament colors
+  keep their real color and get a light outer ring so they stay visible.
 - **Filament path** — live view of the filament route
   `ACE -> SPLITTER -> Encoder -> Nozzle`, driven by your filament sensors:
   - green filled dot — sensor sees filament;
   - hollow red dot — sensor is present but reports no filament;
+  - while ACE is loading/unloading, the segment the filament is currently
+    travelling through shows an animated flow, in load and unload direction;
+  - the encoder can only be green when the splitter has filament — if the
+    splitter is empty the encoder goes dark regardless of its own sensor;
   - the section is **hidden automatically** when the matching sensor does not
     exist in the printer config, so the path adapts to your hardware.
 - **Jam indicator** — the encoder ring turns red when filament is at the nozzle
   but not at the encoder (jam or break between them).
-- **Feed assist toggle** — one-click `ACE_ENABLE_FEED_ASSIST T=` /
-  `ACE_DISABLE_FEED_ASSIST T=` (native driver commands).
+- **Feed assist switch** — a segmented OFF / FEED ASSIST toggle using the
+  driver's native `ACE_ENABLE_FEED_ASSIST T=` / `ACE_DISABLE_FEED_ASSIST T=`
+  commands. Click anywhere on the switch to toggle; the frame is blue only
+  while assist is on.
 - **Dryer dialog** — chamber temperature, DRYING/IDLE state with remaining time,
   temperature slider (50–65 °C, step 5) and duration slider (30–240 min, step 30).
+
+![Slot dialog](docs/slot-dialog.png)
+
 - Service actions: load all slots, full unload, reconnect, request status.
 
 ## Requirements
@@ -42,7 +54,7 @@ and unpack it over your Fluidd webroot:
 ```bash
 curl -L -o fluidd-ace-v1.1.tar.gz https://github.com/sanakess/fluidd-ace-panel/releases/download/v1.1/fluidd-ace-v1.1.tar.gz
 sudo rm -rf /usr/share/fluidd/*        # adjust to your webroot
-sudo tar xzf fluidd-ace.tar.gz -C /usr/share/fluidd
+sudo tar xzf fluidd-ace-v1.1.tar.gz -C /usr/share/fluidd
 ```
 
 Hard-reload the browser (Ctrl+Shift+R) afterwards. To build from source
