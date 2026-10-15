@@ -277,26 +277,21 @@
           >
             <div
               class="ace-fa-switch"
-              :class="{ 'ace-fa-enabled': feedAssistOn }"
+              :class="{ 'ace-fa-enabled': feedAssistOn, 'ace-fa-disabled': !canService || currentTool < 0 }"
+              @click="toggleFeedAssist(!feedAssistOn)"
             >
-              <button
-                type="button"
+              <div
                 class="ace-fa-seg"
                 :class="{ active: !feedAssistOn }"
-                :disabled="!canService || currentTool < 0"
-                @click="toggleFeedAssist(false)"
               >
                 OFF
-              </button>
-              <button
-                type="button"
+              </div>
+              <div
                 class="ace-fa-seg"
                 :class="{ active: feedAssistOn }"
-                :disabled="!canService || currentTool < 0"
-                @click="toggleFeedAssist(true)"
               >
                 FEED ASSIST
-              </button>
+              </div>
             </div>
           </v-col>
           <v-col
@@ -673,16 +668,21 @@ export default class AceCard extends Mixins(StateMixin, AceMixin) {
     return 'ace-status-ready'
   }
 
-  // Spool ring color; dark spool colors get a light ring so they stay
-  // visible on the dark slot tile.
+  // Spool ring keeps the real filament color; dark colors additionally
+  // get a light outer ring (ace-spool-dark) so they stay visible on the
+  // dark slot tile.
   spoolBorderCss (slot?: AceSlot): string | undefined {
     if (this.slotEmpty(slot)) return undefined
+    return this.slotColorCss(slot)
+  }
+
+  slotDark (slot?: AceSlot): boolean {
     const c = slot?.color
     if (Array.isArray(c) && c.length >= 3) {
       const lum = 0.299 * Number(c[0]) + 0.587 * Number(c[1]) + 0.114 * Number(c[2])
-      if (lum < 60) return '#6E6E73'
+      return lum < 60
     }
-    return this.slotColorCss(slot)
+    return false
   }
 
   // Swatch border: dark swatches need a light border to stay visible.
@@ -696,6 +696,7 @@ export default class AceCard extends Mixins(StateMixin, AceMixin) {
   spoolClasses (instanceIndex: number, slot: AceSlot): Record<string, boolean> {
     return {
       'ace-spool-empty': this.slotEmpty(slot),
+      'ace-spool-dark': !this.slotEmpty(slot) && this.slotDark(slot),
       'ace-spool-current': this.isCurrentTool(instanceIndex, slot.index),
       'ace-spool-printing': this.isCurrentTool(instanceIndex, slot.index) && this.printing
     }
@@ -720,7 +721,7 @@ export default class AceCard extends Mixins(StateMixin, AceMixin) {
   }
 
   toggleFeedAssist (value: boolean) {
-    if (this.currentTool < 0) return
+    if (!this.canService || this.currentTool < 0) return
     if (this.feedAssistSlot == null) this.faLocal = value
     this.send(value
       ? `ACE_ENABLE_FEED_ASSIST T=${this.currentTool}`
@@ -883,6 +884,15 @@ export default class AceCard extends Mixins(StateMixin, AceMixin) {
   box-shadow: 0 0 0 2px #ff9800, 0 0 10px rgba(255, 152, 0, 0.7);
 }
 
+// Dark filament colors (e.g. black): light outer ring for contrast
+.ace-spool-dark {
+  box-shadow: 0 0 0 2px #6e6e73;
+}
+
+.ace-spool-current.ace-spool-dark {
+  box-shadow: 0 0 0 2px #2196f3, 0 0 8px rgba(33, 150, 243, 0.6);
+}
+
 .ace-spool-edit {
   position: absolute;
   right: -7px;
@@ -982,22 +992,35 @@ export default class AceCard extends Mixins(StateMixin, AceMixin) {
   display: flex;
   width: 100%;
   height: 28px;
-  border: 1px solid #2196f3;
+  border: 1px solid #4a4a4f;
   border-radius: 4px;
   overflow: hidden;
+  cursor: pointer;
+
+  // Blue frame only while feed assist is on
+  &.ace-fa-enabled {
+    border-color: #2196f3;
+  }
+
+  &.ace-fa-disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
 }
 
 .ace-fa-seg {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.72em;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #9e9e9e;
   background: rgba(33, 150, 243, 0.08);
-  border: none;
   padding: 0 2px;
-  cursor: pointer;
   white-space: nowrap;
+  user-select: none;
 
   &.active {
     color: #ffffff;
@@ -1012,11 +1035,6 @@ export default class AceCard extends Mixins(StateMixin, AceMixin) {
 
   &:last-child.active {
     background: #2196f3;
-  }
-
-  &:disabled {
-    cursor: default;
-    opacity: 0.5;
   }
 }
 
